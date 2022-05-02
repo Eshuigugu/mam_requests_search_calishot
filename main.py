@@ -5,7 +5,7 @@ import json
 from bs4 import BeautifulSoup
 
 
-def img_fetched_sucessfully(img_url, sess=requests.Session()):
+def test_url(img_url, sess=requests.Session()):
     try:
         return sess.get(img_url, timeout=10).status_code == 200
     except:
@@ -53,7 +53,10 @@ if __name__ == '__main__':
     json_columns = ['cover', 'title', 'authors', 'links', 'tags', 'identifiers', 'formats']
     hits_misses = [0, 0]
     hits_ids = []
-    calishot_url = 'https://calishot-eng-2.herokuapp.com/index-eng/summary.json'
+    # get a working calishot host
+    for calishot_url in ['https://eng.calishot.xyz/index-eng/summary.json', 'https://calishot-eng-2.herokuapp.com/index-eng/summary.json']:
+        if test_url(calishot_url, sess=sess):
+            break
     for book in req_books_reduced:
         book['url'] = 'https://www.myanonamouse.net/tor/viewRequest.php/' + str(book['id'])[:-5] + '.' + str(book['id'])[-5:]
         title = BeautifulSoup(f'<h1>{book["title"]}</h1>', features="lxml").text
@@ -73,7 +76,7 @@ if __name__ == '__main__':
                     zip(columns, x)} for x in r.json()['rows']]
 
         # try fetching the cover images to ensure the calibre libraries are online
-        results = [x for x in results if img_fetched_sucessfully(x['cover']['img_src'], sess=sess)]
+        results = [x for x in results if test_url(x['cover']['img_src'], sess=sess)]
         if results:
             hits_misses[0] += 1
             print(book['url'], title, f'got {len(results)} hits', [x['title'] for x in results])
