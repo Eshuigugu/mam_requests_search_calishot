@@ -5,9 +5,9 @@ import json
 from bs4 import BeautifulSoup
 
 
-def test_url(img_url, sess=requests.Session()):
+def test_url(url, sess=requests.Session()):
     try:
-        return sess.get(img_url, timeout=10).status_code == 200
+        return sess.get(url, timeout=10).status_code == 200
     except:
         return False
 
