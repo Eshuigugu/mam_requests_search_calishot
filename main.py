@@ -53,7 +53,7 @@ if __name__ == '__main__':
     json_columns = ['cover', 'title', 'authors', 'links', 'tags', 'identifiers', 'formats']
     hits_misses = [0, 0]
     hits_ids = []
-    hero_url = 'https://calishot-eng-2.herokuapp.com/index-eng/summary.json'
+    calishot_url = 'https://calishot-eng-2.herokuapp.com/index-eng/summary.json'
     for book in req_books_reduced:
         book['url'] = 'https://www.myanonamouse.net/tor/viewRequest.php/' + str(book['id'])[:-5] + '.' + str(book['id'])[-5:]
         title = BeautifulSoup(f'<h1>{book["title"]}</h1>', features="lxml").text
@@ -65,7 +65,7 @@ if __name__ == '__main__':
                           }
 
         time.sleep(1)
-        r = sess.get(hero_url, params=request_params, timeout=60)
+        r = sess.get(calishot_url, params=request_params, timeout=60)
         columns = r.json()['columns']
 
         # restructure the json results
@@ -80,3 +80,4 @@ if __name__ == '__main__':
         else:
             hits_misses[1] += 1
     print(hits_misses)
+
