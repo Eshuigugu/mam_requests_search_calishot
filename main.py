@@ -51,8 +51,6 @@ if __name__ == '__main__':
                              'lang_code'] == 'ENG']
 
     json_columns = ['cover', 'title', 'authors', 'links', 'tags', 'identifiers', 'formats']
-    hits_misses = [0, 0]
-    hits_ids = []
     # get a working calishot host
     for calishot_url in ['https://eng.calishot.xyz/index-eng/summary.json', 'https://calishot-eng-2.herokuapp.com/index-eng/summary.json']:
         if test_url(calishot_url, sess=sess):
@@ -78,9 +76,5 @@ if __name__ == '__main__':
         # try fetching the cover images to ensure the calibre libraries are online
         results = [x for x in results if test_url(x['cover']['img_src'], sess=sess)]
         if results:
-            hits_misses[0] += 1
             print(book['url'], title, f'got {len(results)} hits', [x['title'] for x in results])
-        else:
-            hits_misses[1] += 1
-    print(hits_misses)
 
